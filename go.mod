@@ -3,7 +3,7 @@ module github.com/Portshift/dockle
 go 1.13
 
 require (
-	github.com/Portshift/klar v1.9.10-0.20201117231249-97be18dd7f8a
+	github.com/Portshift/klar v1.9.10-0.20201118172109-371310ea259d
 	github.com/containers/image/v5 v5.4.4
 	github.com/d4l3k/messagediff v1.2.2-0.20180726183240-b9e99b2f9263
 	github.com/docker/go-connections v0.4.0

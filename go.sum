@@ -54,6 +54,8 @@ github.com/Portshift/klar v1.9.10-0.20201103090701-50a9d7378588 h1:BPGSvRzjTHGul
 github.com/Portshift/klar v1.9.10-0.20201103090701-50a9d7378588/go.mod h1:VvGEpxSqz8Y+TYPbxisrLmMiRQxvH2gd28zQHSI55vI=
 github.com/Portshift/klar v1.9.10-0.20201117231249-97be18dd7f8a h1:yqhxUe2ZqWgiKcQKh+CcPkhvpvhXaqolcISDCBzk/zI=
 github.com/Portshift/klar v1.9.10-0.20201117231249-97be18dd7f8a/go.mod h1:BVPXethETeq6dYE/WjN8BRAu72fdABZyb4MbkjMbry0=
+github.com/Portshift/klar v1.9.10-0.20201118172109-371310ea259d h1:4NuajDK9kwUPN5KjGe1EvBaG5m2M5nreQ+/zPJMyhHE=
+github.com/Portshift/klar v1.9.10-0.20201118172109-371310ea259d/go.mod h1:BVPXethETeq6dYE/WjN8BRAu72fdABZyb4MbkjMbry0=
 github.com/Portshift/klar v2.4.1+incompatible h1:E7HaYEb6Cj9qiNs8KWLd7t7ed/bEOc7Zfpd3kqFjwKk=
 github.com/Portshift/klar v2.4.1+incompatible/go.mod h1:2jNetZmWxv5K7Jytufmb2Q5agQo23FLRboip1WEGOGY=
 github.com/PuerkitoBio/purell v1.0.0/go.mod h1:c11w/QuzBsJSee3cPx9rAFu61PvFxuPbtSwDGJws/X0=
