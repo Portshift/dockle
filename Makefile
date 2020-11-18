@@ -2,7 +2,7 @@ SOURCE := ./cmd/dockle_remote/
 BINARY := dockle_remote
 DOCKER_REGISTRY ?= gcr.io/development-infra-208909
 VERSION ?= $(shell git rev-parse HEAD)
-IMAGE_NAME ?= $(DOCKER_REGISTRY)/$(BINARY):$(VERSION)
+IMAGE_NAME ?= $(DOCKER_REGISTRY)/dockle:$(VERSION)
 TARGET_OS ?= linux
 
 build:
