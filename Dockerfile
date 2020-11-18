@@ -1,7 +1,7 @@
 FROM golang:1.14.4-alpine AS builder
 WORKDIR /go/src/github.com/Portshift/dockle/
 COPY ./ ./
-RUN CGO_ENABLED=0 go build -o dockle ./cmd/dockle_remote/
+RUN CGO_ENABLED=0 go build -o dockle_remote ./cmd/dockle_remote/
 
 FROM registry.access.redhat.com/ubi8
 RUN yum install ca-certificates -y
