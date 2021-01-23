@@ -101,7 +101,7 @@ func run(imageName string) {
 	if err != nil {
 		errMsg := fmt.Errorf("failed to run dockle: %w", err)
 		log.Logger.Error(errMsg)
-		scanResults.ScanErr = errMsg
+		scanResults.ScanErr = dockle_types.ConvertError(errMsg)
 		scanResults.Success = false
 	} else {
 		scanResults.Success = true
