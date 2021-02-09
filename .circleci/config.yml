@@ -38,7 +38,7 @@ jobs:
       - run: >
            if [ "${CIRCLE_TAG}" != "" ];
            then
-           VERSION=${CIRCLE_TAG} make docker.push
+            VERSION=${CIRCLE_TAG} make docker.push
            fi
 
 
