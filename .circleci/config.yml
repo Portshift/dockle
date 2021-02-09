@@ -45,14 +45,8 @@ jobs:
 workflows:
   test_build_and_push:
     jobs:
-      - test:
-          filters:
-            tags:
-              only: /^[0-9]+(\.[0-9]+)*$/
+      - test
       - build_and_push:
           requires:
             - test
-          context: REG_CREDS
-          filters:
-            tags:
-              only: /^[0-9]+(\.[0-9]+)*$/
+          context: CISCO_REG_CREDS
