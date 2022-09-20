@@ -7,7 +7,6 @@ require (
 	github.com/d4l3k/messagediff v1.2.2-0.20180726183240-b9e99b2f9263
 	github.com/docker/go-connections v0.4.0
 	github.com/goodwithtech/deckoder v0.0.0-20210909145842-06c0013a5310
-	github.com/goodwithtech/dockle v0.4.3
 	github.com/google/go-cmp v0.5.5
 	github.com/owenrumney/go-sarif v1.0.10
 	github.com/urfave/cli v1.22.4
@@ -56,7 +55,6 @@ require (
 	github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 // indirect
 	github.com/mistifyio/go-zfs v2.1.2-0.20190413222219-f784269be439+incompatible // indirect
 	github.com/moby/sys/mountinfo v0.4.1 // indirect
-	github.com/moby/term v0.0.0-20210619224110-3f7ff695adc6 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
