@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	"github.com/Portshift/dockle/pkg/log"
 	"github.com/Portshift/dockle/pkg/types"
-	"github.com/Portshift/dockle/pkg/utils"
 )
 
 var (
@@ -30,7 +30,7 @@ func (a CacheAssessor) Assess(fileMap types.FileMap) ([]*types.Assessment, error
 		dirBase := filepath.Base(dirName)
 
 		// match Directory
-		if utils.StringInSlice(dirBase+"/", reqDirs) || utils.StringInSlice(dirName+"/", reqDirs) {
+		if slices.Contains(reqDirs, dirBase+"/") || slices.Contains(reqDirs, dirName+"/") {
 			if _, ok := detectedDir[dirName]; ok {
 				continue
 			}
@@ -52,7 +52,7 @@ func (a CacheAssessor) Assess(fileMap types.FileMap) ([]*types.Assessment, error
 		}
 
 		// match File
-		if utils.StringInSlice(filename, reqFiles) || utils.StringInSlice(fileBase, reqFiles) {
+		if slices.Contains(reqFiles, filename) || slices.Contains(reqFiles, fileBase) {
 			assesses = append(
 				assesses,
 				&types.Assessment{
