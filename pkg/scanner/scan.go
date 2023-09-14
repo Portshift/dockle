@@ -95,7 +95,7 @@ func ScanImage(ctx context.Context, cfg config.Config) ([]*types.Assessment, err
 		}
 		files[entry.Path] = types.FileData{
 			Body:     content,
-			FileMode: entry.FileInfo.Mode(),
+			FileMode: fileMode,
 		}
 	}
 
