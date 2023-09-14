@@ -1,6 +1,6 @@
 module github.com/Portshift/dockle
 
-go 1.19
+go 1.21
 
 require (
 	github.com/anchore/stereoscope v0.0.0-20230911191510-2fc2d6c2503b
