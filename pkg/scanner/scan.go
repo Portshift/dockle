@@ -65,6 +65,8 @@ func ScanImage(ctx context.Context, cfg config.Config) ([]*types.Assessment, err
 	files := make(map[string]types.FileData)
 	filterFunc := createPathPermissionFilterFunc(assessor.LoadRequiredFiles(), assessor.LoadRequiredExtensions(), assessor.LoadRequiredPermissions())
 
+	// The `/config` pseudo file contains the raw config of the container image
+	// that stores the environment variables, commands, etc... used during the image build.
 	files["/config"] = types.FileData{
 		Body: img.Metadata.RawConfig,
 	}
