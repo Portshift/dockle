@@ -103,10 +103,7 @@ func createFileMap(img *image.Image, filterFunc types.FilterFunc) (types.FileMap
 		if err != nil {
 			return nil, fmt.Errorf("failed to open file=%s: %w", entry.RealPath, err)
 		}
-		//content, err := io.ReadAll(contentReader)
-		//if err != nil {
-		//	return nil, fmt.Errorf("failed to read content of file=%s: %w", entry.RealPath, err)
-		//}
+
 		files[entry.Path] = types.FileData{
 			ContentReader: contentReader,
 			FileMode:      fileMode,
