@@ -17,6 +17,7 @@ import (
 	"github.com/Portshift/dockle/pkg/report"
 	"github.com/Portshift/dockle/pkg/scanner"
 	"github.com/Portshift/dockle/pkg/types"
+	"github.com/Portshift/dockle/pkg/utils"
 )
 
 func RunFromCli(c *cli.Context) (err error) {
@@ -25,15 +26,15 @@ func RunFromCli(c *cli.Context) (err error) {
 
 	config.CreateFromCli(c)
 
-	//cliVersion := "v" + c.App.Version
-	//latestVersion, err := utils.FetchLatestVersion(ctx)
-	//
-	//// check latest version
-	//if err != nil {
-	//	log.Logger.Infof("Failed to check latest version. %s", err)
-	//} else if cliVersion != latestVersion && c.App.Version != "dev" {
-	//	log.Logger.Warnf("A new version %s is now available! You have %s.", latestVersion, cliVersion)
-	//}
+	cliVersion := "v" + c.App.Version
+	latestVersion, err := utils.FetchLatestVersion(ctx)
+
+	// check latest version
+	if err != nil {
+		log.Logger.Infof("Failed to check latest version. %s", err)
+	} else if cliVersion != latestVersion && c.App.Version != "dev" {
+		log.Logger.Warnf("A new version %s is now available! You have %s.", latestVersion, cliVersion)
+	}
 
 	_, err = run(ctx)
 
