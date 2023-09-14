@@ -62,8 +62,18 @@ func ScanImage(ctx context.Context, cfg config.Config) ([]*types.Assessment, err
 		return nil, fmt.Errorf("failed to get image from user input=%s: %w", userInput, err)
 	}
 
-	files := make(map[string]types.FileData)
 	filterFunc := createPathPermissionFilterFunc(assessor.LoadRequiredFiles(), assessor.LoadRequiredExtensions(), assessor.LoadRequiredPermissions())
+
+	files, err := createFileMap(img, filterFunc)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create file map: %w", err)
+	}
+
+	return assessor.GetAssessments(files), nil
+}
+
+func createFileMap(img *image.Image, filterFunc types.FilterFunc) (types.FileMap, error) {
+	files := make(map[string]types.FileData)
 
 	// The `/config` pseudo file contains the raw config of the container image
 	// that stores the environment variables, commands, etc... used during the image build.
@@ -99,7 +109,7 @@ func ScanImage(ctx context.Context, cfg config.Config) ([]*types.Assessment, err
 		}
 	}
 
-	return assessor.GetAssessments(files), nil
+	return files, nil
 }
 
 func createPathPermissionFilterFunc(filenames, extensions []string, permissions []os.FileMode) types.FilterFunc {
