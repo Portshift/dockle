@@ -1,14 +1,15 @@
 package scanner
 
 import (
+	"bytes"
 	"context"
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 
 	"github.com/anchore/stereoscope"
 	"github.com/anchore/stereoscope/pkg/image"
+	"github.com/docker/docker/pkg/ioutils"
 
 	"github.com/Portshift/dockle/config"
 	"github.com/Portshift/dockle/pkg/assessor"
@@ -77,7 +78,11 @@ func createFileMap(img *image.Image, filterFunc types.FilterFunc) (types.FileMap
 	// The `/config` pseudo file contains the raw config of the container image
 	// that stores the environment variables, commands, etc... used during the image build.
 	files["/config"] = types.FileData{
-		Body: img.Metadata.RawConfig,
+		ContentReader: ioutils.NewReadCloserWrapper(
+			bytes.NewReader(img.Metadata.RawConfig),
+			func() error {
+				return nil
+			}),
 	}
 	refs := img.SquashedTree().AllFiles()
 	for i := range refs {
@@ -98,13 +103,13 @@ func createFileMap(img *image.Image, filterFunc types.FilterFunc) (types.FileMap
 		if err != nil {
 			return nil, fmt.Errorf("failed to open file=%s: %w", entry.RealPath, err)
 		}
-		content, err := io.ReadAll(contentReader)
-		if err != nil {
-			return nil, fmt.Errorf("failed to read content of file=%s: %w", entry.RealPath, err)
-		}
+		//content, err := io.ReadAll(contentReader)
+		//if err != nil {
+		//	return nil, fmt.Errorf("failed to read content of file=%s: %w", entry.RealPath, err)
+		//}
 		files[entry.Path] = types.FileData{
-			Body:     content,
-			FileMode: fileMode,
+			ContentReader: contentReader,
+			FileMode:      fileMode,
 		}
 	}
 

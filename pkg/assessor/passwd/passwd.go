@@ -4,11 +4,11 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
 	"github.com/Portshift/dockle/pkg/log"
-
 	"github.com/Portshift/dockle/pkg/types"
 )
 
@@ -25,7 +25,13 @@ func (a PasswdAssessor) Assess(fileMap types.FileMap) ([]*types.Assessment, erro
 			continue
 		}
 		existFile = true
-		scanner := bufio.NewScanner(bytes.NewBuffer(file.Body))
+
+		content, err := io.ReadAll(file.ContentReader)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read content of file=%s: %w", filename, err)
+		}
+
+		scanner := bufio.NewScanner(bytes.NewBuffer(content))
 		for scanner.Scan() {
 			line := scanner.Text()
 			passData := strings.Split(line, ":")

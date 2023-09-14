@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 	"time"
@@ -31,7 +32,12 @@ func (a ManifestAssessor) Assess(fileMap types.FileMap) (assesses []*types.Asses
 
 	var d types.Image
 
-	err = json.Unmarshal(file.Body, &d)
+	content, err := io.ReadAll(file.ContentReader)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read content of /config: %w", err)
+	}
+
+	err = json.Unmarshal(content, &d)
 	if err != nil {
 		return nil, errors.New("Fail to parse docker config file.")
 	}

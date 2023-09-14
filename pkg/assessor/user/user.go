@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -24,7 +25,13 @@ func (a UserAssessor) Assess(fileMap types.FileMap) ([]*types.Assessment, error)
 			continue
 		}
 		existFile = true
-		scanner := bufio.NewScanner(bytes.NewBuffer(file.Body))
+
+		content, err := io.ReadAll(file.ContentReader)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read content of file=%s: %w", filename, err)
+		}
+
+		scanner := bufio.NewScanner(bytes.NewBuffer(content))
 		uidMap := map[string]struct{}{}
 		for scanner.Scan() {
 			line := scanner.Text()

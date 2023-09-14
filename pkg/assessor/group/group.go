@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -25,7 +26,13 @@ func (a GroupAssessor) Assess(fileMap types.FileMap) ([]*types.Assessment, error
 			continue
 		}
 		existFile = true
-		scanner := bufio.NewScanner(bytes.NewBuffer(file.Body))
+
+		content, err := io.ReadAll(file.ContentReader)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read content of file=%s: %w", filename, err)
+		}
+
+		scanner := bufio.NewScanner(bytes.NewBuffer(content))
 		gidMap := map[string]struct{}{}
 
 		for scanner.Scan() {
