@@ -47,7 +47,6 @@ type Config struct {
 	AcceptanceFiles      []string
 	AcceptanceExtensions []string
 	NoColor              bool
-	Platform             string
 }
 
 var Conf Config

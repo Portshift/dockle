@@ -44,7 +44,6 @@ func ScanImage(ctx context.Context, cfg config.Config) ([]*types.Assessment, err
 			},
 		},
 		InsecureUseHTTP: config.Conf.NonSSL,
-		Platform:        config.Conf.Platform,
 	}
 
 	var userInput string
