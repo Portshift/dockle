@@ -11,7 +11,7 @@ var HostEnvironmentFileName = "ENVIRONMENT variable on HOST OS"
 
 type ContentTrustAssessor struct{}
 
-func (a ContentTrustAssessor) Assess(_ types.FileMap) ([]*types.Assessment, error) {
+func (a ContentTrustAssessor) Assess(_ *types.ImageData) ([]*types.Assessment, error) {
 	log.Logger.Debug("Scan start : DOCKER_CONTENT_TRUST")
 
 	if os.Getenv("DOCKER_CONTENT_TRUST") != "1" {

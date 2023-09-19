@@ -9,7 +9,7 @@ import (
 
 type HostsAssessor struct{}
 
-func (a HostsAssessor) Assess(_ types.FileMap) ([]*types.Assessment, error) {
+func (a HostsAssessor) Assess(_ *types.ImageData) ([]*types.Assessment, error) {
 	log.Logger.Debug("Start scan : /etc/hosts")
 
 	assesses := []*types.Assessment{}

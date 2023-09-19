@@ -13,12 +13,12 @@ import (
 
 type CredentialAssessor struct{}
 
-func (a CredentialAssessor) Assess(fileMap types.FileMap) ([]*types.Assessment, error) {
+func (a CredentialAssessor) Assess(imageData *types.ImageData) ([]*types.Assessment, error) {
 	log.Logger.Debug("Start scan : credential files")
 	assesses := []*types.Assessment{}
 	fmap := makeMaps(a.RequiredFiles())
 	fexts := makeMaps(a.RequiredExtensions())
-	for filename := range fileMap {
+	for filename := range imageData.FileMap {
 		basename := filepath.Base(filename)
 		// check exist target files
 		if _, ok := fmap[basename]; ok {

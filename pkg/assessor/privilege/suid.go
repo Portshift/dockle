@@ -9,10 +9,10 @@ import (
 
 type PrivilegeAssessor struct{}
 
-func (a PrivilegeAssessor) Assess(fileMap types.FileMap) ([]*types.Assessment, error) {
+func (a PrivilegeAssessor) Assess(imageData *types.ImageData) ([]*types.Assessment, error) {
 	var assesses []*types.Assessment
 
-	for filename, filedata := range fileMap {
+	for filename, filedata := range imageData.FileMap {
 		if filedata.FileMode&os.ModeSetuid != 0 {
 			assesses = append(
 				assesses,

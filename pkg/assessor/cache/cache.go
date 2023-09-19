@@ -21,10 +21,10 @@ var (
 
 type CacheAssessor struct{}
 
-func (a CacheAssessor) Assess(fileMap types.FileMap) ([]*types.Assessment, error) {
+func (a CacheAssessor) Assess(imageData *types.ImageData) ([]*types.Assessment, error) {
 	log.Logger.Debug("Start scan : cache files")
 	assesses := []*types.Assessment{}
-	for filename := range fileMap {
+	for filename := range imageData.FileMap {
 		fileBase := filepath.Base(filename)
 		dirName := filepath.Dir(filename)
 		dirBase := filepath.Base(dirName)

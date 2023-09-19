@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"os"
 	"strings"
 	"time"
@@ -23,21 +22,14 @@ var (
 	acceptanceEnvKey = map[string]struct{}{"GPG_KEY": {}, "GPG_KEYS": {}}
 )
 
-func (a ManifestAssessor) Assess(fileMap types.FileMap) (assesses []*types.Assessment, err error) {
-	log.Logger.Debug("Scan start : config file")
-	file, ok := fileMap["/config"]
-	if !ok {
+func (a ManifestAssessor) Assess(imageData *types.ImageData) (assesses []*types.Assessment, err error) {
+	log.Logger.Debug("Scan start : check config")
+	if imageData.Metadata.RawConfig == nil {
 		return nil, errors.New("config json file doesn't exist")
 	}
 
 	var d types.Image
-
-	content, err := io.ReadAll(file.ContentReader)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read content of /config: %w", err)
-	}
-
-	err = json.Unmarshal(content, &d)
+	err = json.Unmarshal(imageData.Metadata.RawConfig, &d)
 	if err != nil {
 		return nil, errors.New("Fail to parse docker config file.")
 	}

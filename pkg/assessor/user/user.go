@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"io"
 	"os"
 	"strings"
 
@@ -14,21 +13,21 @@ import (
 
 type UserAssessor struct{}
 
-func (a UserAssessor) Assess(fileMap types.FileMap) ([]*types.Assessment, error) {
+func (a UserAssessor) Assess(imageData *types.ImageData) ([]*types.Assessment, error) {
 	log.Logger.Debug("Start scan : /etc/passwd")
 
 	var existFile bool
 	assesses := []*types.Assessment{}
 	for _, filename := range a.RequiredFiles() {
-		file, ok := fileMap[filename]
+		file, ok := imageData.FileMap[filename]
 		if !ok {
 			continue
 		}
 		existFile = true
 
-		content, err := io.ReadAll(file.ContentReader)
+		content, err := file.ReadContentAndClose(imageData.Image)
 		if err != nil {
-			return nil, fmt.Errorf("failed to read content of file=%s: %w", filename, err)
+			return nil, fmt.Errorf("failed to read content and close: %w", err)
 		}
 
 		scanner := bufio.NewScanner(bytes.NewBuffer(content))

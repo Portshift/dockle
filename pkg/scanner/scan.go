@@ -1,7 +1,6 @@
 package scanner
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"os"
@@ -9,8 +8,6 @@ import (
 
 	"github.com/anchore/stereoscope"
 	"github.com/anchore/stereoscope/pkg/image"
-	"github.com/docker/docker/pkg/ioutils"
-	"github.com/sirupsen/logrus"
 
 	"github.com/Portshift/dockle/config"
 	"github.com/Portshift/dockle/pkg/assessor"
@@ -70,28 +67,16 @@ func ScanImage(ctx context.Context, cfg config.Config) ([]*types.Assessment, err
 		return nil, fmt.Errorf("failed to create file map: %w", err)
 	}
 
-	assessments := assessor.GetAssessments(files)
-	for name, file := range files {
-		if err := file.ContentReader.Close(); err != nil {
-			logrus.Errorf("Failed to close file=%s: %v", name, err)
-		}
+	imageData := &types.ImageData{
+		Image:   img,
+		FileMap: files,
 	}
 
-	return assessments, nil
+	return assessor.GetAssessments(imageData), nil
 }
 
-func createFileMap(img *image.Image, filterFunc types.FilterFunc) (types.FileMap, error) {
+func createFileMap(img *image.Image, filterFunc types.FilterFunc) (map[string]types.FileData, error) {
 	files := make(map[string]types.FileData)
-
-	// The `/config` pseudo file contains the raw config of the container image
-	// that stores the environment variables, commands, etc... used during the image build.
-	files["/config"] = types.FileData{
-		ContentReader: ioutils.NewReadCloserWrapper(
-			bytes.NewReader(img.Metadata.RawConfig),
-			func() error {
-				return nil
-			}),
-	}
 	refs := img.SquashedTree().AllFiles()
 	for i := range refs {
 		entry, err := img.FileCatalog.Get(refs[i])
@@ -107,14 +92,9 @@ func createFileMap(img *image.Image, filterFunc types.FilterFunc) (types.FileMap
 			continue
 		}
 
-		contentReader, err := img.OpenPathFromSquash(entry.RealPath)
-		if err != nil {
-			return nil, fmt.Errorf("failed to open file=%s: %w", entry.RealPath, err)
-		}
-
 		files[entry.Path] = types.FileData{
-			ContentReader: contentReader,
-			FileMode:      fileMode,
+			RealPath: entry.RealPath,
+			FileMode: fileMode,
 		}
 	}
 
