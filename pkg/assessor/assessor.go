@@ -48,6 +48,7 @@ func GetAssessments(files types.FileMap) (assessments []*types.Assessment) {
 		}
 		assessments = append(assessments, results...)
 	}
+
 	return assessments
 }
 

@@ -31,9 +31,6 @@ func (a GroupAssessor) Assess(fileMap types.FileMap) ([]*types.Assessment, error
 		if err != nil {
 			return nil, fmt.Errorf("failed to read content of file=%s: %w", filename, err)
 		}
-		if err := file.ContentReader.Close(); err != nil {
-			return nil, fmt.Errorf("failed to close content reader: %w", err)
-		}
 
 		scanner := bufio.NewScanner(bytes.NewBuffer(content))
 		gidMap := map[string]struct{}{}

@@ -10,6 +10,7 @@ import (
 	"github.com/anchore/stereoscope"
 	"github.com/anchore/stereoscope/pkg/image"
 	"github.com/docker/docker/pkg/ioutils"
+	"github.com/sirupsen/logrus"
 
 	"github.com/Portshift/dockle/config"
 	"github.com/Portshift/dockle/pkg/assessor"
@@ -69,7 +70,14 @@ func ScanImage(ctx context.Context, cfg config.Config) ([]*types.Assessment, err
 		return nil, fmt.Errorf("failed to create file map: %w", err)
 	}
 
-	return assessor.GetAssessments(files), nil
+	assessments := assessor.GetAssessments(files)
+	for name, file := range files {
+		if err := file.ContentReader.Close(); err != nil {
+			logrus.Errorf("Failed to close file=%s: %v", name, err)
+		}
+	}
+
+	return assessments, nil
 }
 
 func createFileMap(img *image.Image, filterFunc types.FilterFunc) (types.FileMap, error) {
