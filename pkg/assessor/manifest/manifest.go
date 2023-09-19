@@ -36,6 +36,9 @@ func (a ManifestAssessor) Assess(fileMap types.FileMap) (assesses []*types.Asses
 	if err != nil {
 		return nil, fmt.Errorf("failed to read content of /config: %w", err)
 	}
+	if err := file.ContentReader.Close(); err != nil {
+		return nil, fmt.Errorf("failed to close content reader: %w", err)
+	}
 
 	err = json.Unmarshal(content, &d)
 	if err != nil {

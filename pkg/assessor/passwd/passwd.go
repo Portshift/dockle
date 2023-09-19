@@ -30,7 +30,9 @@ func (a PasswdAssessor) Assess(fileMap types.FileMap) ([]*types.Assessment, erro
 		if err != nil {
 			return nil, fmt.Errorf("failed to read content of file=%s: %w", filename, err)
 		}
-
+		if err := file.ContentReader.Close(); err != nil {
+			return nil, fmt.Errorf("failed to close content reader: %w", err)
+		}
 		scanner := bufio.NewScanner(bytes.NewBuffer(content))
 		for scanner.Scan() {
 			line := scanner.Text()
