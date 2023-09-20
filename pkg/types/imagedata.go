@@ -7,6 +7,8 @@ import (
 
 	"github.com/anchore/stereoscope/pkg/file"
 	"github.com/anchore/stereoscope/pkg/image"
+
+	"github.com/Portshift/dockle/pkg/log"
 )
 
 type ImageData struct {
@@ -16,13 +18,12 @@ type ImageData struct {
 
 type FileData struct {
 	RealPath file.Path
-	Content  []byte
 	FileMode os.FileMode
 }
 
 type FilterFunc func(filePath string, fileMode os.FileMode) (bool, error)
 
-func (f *FileData) ReadContentAndClose(img *image.Image) ([]byte, error) {
+func (f *FileData) ReadContent(img *image.Image) ([]byte, error) {
 	contentReader, err := img.OpenPathFromSquash(f.RealPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open file %s: %w", f.RealPath, err)
@@ -32,7 +33,7 @@ func (f *FileData) ReadContentAndClose(img *image.Image) ([]byte, error) {
 		return nil, fmt.Errorf("failed to read content of %s: %w", f.RealPath, err)
 	}
 	if err := contentReader.Close(); err != nil {
-		return nil, fmt.Errorf("failed to close content reader fo %s: %w", f.RealPath, err)
+		log.Logger.Errorf("failed to close content reader fo %s: %w", f.RealPath, err)
 	}
 
 	return content, nil

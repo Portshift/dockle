@@ -25,7 +25,7 @@ func (a UserAssessor) Assess(imageData *types.ImageData) ([]*types.Assessment, e
 		}
 		existFile = true
 
-		content, err := file.ReadContentAndClose(imageData.Image)
+		content, err := file.ReadContent(imageData.Image)
 		if err != nil {
 			return nil, fmt.Errorf("failed to read content and close: %w", err)
 		}
