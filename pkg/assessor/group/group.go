@@ -28,12 +28,14 @@ func (a GroupAssessor) Assess(imageData *types.ImageData) ([]*types.Assessment, 
 
 		content, err := file.ReadContent(imageData.Image)
 		if err != nil {
-			return nil, fmt.Errorf("failed to read content and close: %w", err)
+			return nil, fmt.Errorf("failed to read content: %w", err)
 		}
 
 		scanner := bufio.NewScanner(bytes.NewBuffer(content))
+		if scanner.Err() != nil {
+			return nil, fmt.Errorf("failed to create scanner: %w", err)
+		}
 		gidMap := map[string]struct{}{}
-
 		for scanner.Scan() {
 			line := scanner.Text()
 			data := strings.Split(line, ":")

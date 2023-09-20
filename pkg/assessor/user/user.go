@@ -27,10 +27,13 @@ func (a UserAssessor) Assess(imageData *types.ImageData) ([]*types.Assessment, e
 
 		content, err := file.ReadContent(imageData.Image)
 		if err != nil {
-			return nil, fmt.Errorf("failed to read content and close: %w", err)
+			return nil, fmt.Errorf("failed to read content: %w", err)
 		}
 
 		scanner := bufio.NewScanner(bytes.NewBuffer(content))
+		if scanner.Err() != nil {
+			return nil, fmt.Errorf("failed to create scanner: %w", err)
+		}
 		uidMap := map[string]struct{}{}
 		for scanner.Scan() {
 			line := scanner.Text()
