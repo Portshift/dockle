@@ -59,9 +59,9 @@ func ScanImage(ctx context.Context, cfg config.Config) ([]*types.Assessment, err
 	if err != nil {
 		return nil, fmt.Errorf("failed to get image from user input=%s: %w", userInput, err)
 	}
+	defer img.Cleanup()
 
 	filterFunc := createPathPermissionFilterFunc(assessor.LoadRequiredFiles(), assessor.LoadRequiredExtensions(), assessor.LoadRequiredPermissions())
-
 	files, err := createFileMap(img, filterFunc)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create file map: %w", err)
