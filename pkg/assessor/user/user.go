@@ -31,9 +31,6 @@ func (a UserAssessor) Assess(imageData *types.ImageData) ([]*types.Assessment, e
 		}
 
 		scanner := bufio.NewScanner(bytes.NewBuffer(content))
-		if scanner.Err() != nil {
-			return nil, fmt.Errorf("failed to create scanner: %w", err)
-		}
 		uidMap := map[string]struct{}{}
 		for scanner.Scan() {
 			line := scanner.Text()
@@ -52,6 +49,9 @@ func (a UserAssessor) Assess(imageData *types.ImageData) ([]*types.Assessment, e
 					})
 			}
 			uidMap[uid] = struct{}{}
+		}
+		if scanner.Err() != nil {
+			return nil, fmt.Errorf("failed to create scanner: %w", err)
 		}
 	}
 	if !existFile {

@@ -31,9 +31,6 @@ func (a PasswdAssessor) Assess(imageData *types.ImageData) ([]*types.Assessment,
 		}
 
 		scanner := bufio.NewScanner(bytes.NewBuffer(content))
-		if scanner.Err() != nil {
-			return nil, fmt.Errorf("failed to create scanner: %w", err)
-		}
 		for scanner.Scan() {
 			line := scanner.Text()
 			passData := strings.Split(line, ":")
@@ -47,6 +44,9 @@ func (a PasswdAssessor) Assess(imageData *types.ImageData) ([]*types.Assessment,
 						Desc:     fmt.Sprintf("No password user found! username : %s", passData[0]),
 					})
 			}
+		}
+		if scanner.Err() != nil {
+			return nil, fmt.Errorf("failed to create scanner: %w", err)
 		}
 	}
 	if !existFile {

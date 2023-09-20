@@ -32,9 +32,6 @@ func (a GroupAssessor) Assess(imageData *types.ImageData) ([]*types.Assessment, 
 		}
 
 		scanner := bufio.NewScanner(bytes.NewBuffer(content))
-		if scanner.Err() != nil {
-			return nil, fmt.Errorf("failed to create scanner: %w", err)
-		}
 		gidMap := map[string]struct{}{}
 		for scanner.Scan() {
 			line := scanner.Text()
@@ -52,6 +49,9 @@ func (a GroupAssessor) Assess(imageData *types.ImageData) ([]*types.Assessment, 
 					})
 			}
 			gidMap[gid] = struct{}{}
+		}
+		if scanner.Err() != nil {
+			return nil, fmt.Errorf("failed to create scanner: %w", err)
 		}
 	}
 	if !existFile {
