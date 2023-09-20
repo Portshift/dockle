@@ -33,7 +33,7 @@ func (f *FileData) ReadContent(img *image.Image) ([]byte, error) {
 		return nil, fmt.Errorf("failed to read content of %s: %w", f.RealPath, err)
 	}
 	if err := contentReader.Close(); err != nil {
-		log.Logger.Errorf("failed to close content reader fo %s: %w", f.RealPath, err)
+		log.Logger.Errorf("Failed to close content reader fo %s: %w", f.RealPath, err)
 	}
 
 	return content, nil
