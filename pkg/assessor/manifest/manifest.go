@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/Portshift/dockle/pkg/log"
-
 	"github.com/Portshift/dockle/pkg/types"
 )
 
@@ -23,7 +22,11 @@ var (
 )
 
 func (a ManifestAssessor) Assess(imageData *types.ImageData) (assesses []*types.Assessment, err error) {
-	log.Logger.Debug("Scan start : check config")
+	log.Logger.Debug("Start scan : check config")
+	if imageData.Image == nil {
+		return nil, errors.New("image is nil, ManifestAssessor is skipped")
+	}
+
 	if imageData.Metadata.RawConfig == nil {
 		return nil, errors.New("config json file doesn't exist")
 	}
