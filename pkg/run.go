@@ -68,7 +68,12 @@ func run(ctx context.Context) (ret types.AssessmentMap, err error) {
 	scanner.AddAcceptanceExtensions(config.Conf.AcceptanceExtensions)
 	log.Logger.Debug("Start assessments...")
 
-	assessments, err := scanner.ScanImage(ctx, config.Conf)
+	var assessments []*types.Assessment
+	if config.Conf.DirPath != "" {
+		assessments, err = scanner.ScanDir(ctx, config.Conf)
+	} else {
+		assessments, err = scanner.ScanImage(ctx, config.Conf)
+	}
 
 	if err != nil {
 		if errors.Is(err, context.DeadlineExceeded) {

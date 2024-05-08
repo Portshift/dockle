@@ -3,10 +3,13 @@ package scanner
 import (
 	"context"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/anchore/stereoscope"
+	"github.com/anchore/stereoscope/pkg/file"
 	"github.com/anchore/stereoscope/pkg/image"
 
 	"github.com/Portshift/dockle/config"
@@ -73,6 +76,48 @@ func ScanImage(ctx context.Context, cfg config.Config) ([]*types.Assessment, err
 	}
 
 	return assessor.GetAssessments(imageData), nil
+}
+
+func ScanDir(ctx context.Context, cfg config.Config) ([]*types.Assessment, error) {
+	files := make(map[string]types.FileData)
+	filterFunc := createPathPermissionFilterFunc(assessor.LoadRequiredFiles(), assessor.LoadRequiredExtensions(), assessor.LoadRequiredPermissions())
+	root := cfg.DirPath
+
+	err := filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+
+		info, err := os.Lstat(path)
+		if err != nil {
+			return fmt.Errorf("failed to get file info: %w", err)
+		}
+
+		fileMode := info.Mode()
+		pathWithoutRoot := strings.TrimPrefix(path, root)
+		ok, err := filterFunc(pathWithoutRoot, fileMode)
+		if err != nil {
+			return fmt.Errorf("failed to run filter function on file=%s: %w", path, err)
+		}
+		if !ok {
+			return nil
+		}
+
+		files[pathWithoutRoot] = types.FileData{
+			RealPath: file.Path(path),
+			FileMode: fileMode,
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return assessor.GetAssessments(&types.ImageData{
+		Image:   nil,
+		FileMap: files,
+	}), nil
 }
 
 func createFileMap(img *image.Image, filterFunc types.FilterFunc) (map[string]types.FileData, error) {

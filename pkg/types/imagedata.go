@@ -24,6 +24,14 @@ type FileData struct {
 type FilterFunc func(filePath string, fileMode os.FileMode) (bool, error)
 
 func (f *FileData) ReadContent(img *image.Image) ([]byte, error) {
+	if img == nil {
+		content, err := os.ReadFile(string(f.RealPath))
+		if err != nil {
+			return nil, fmt.Errorf("failed to read content of %s: %w", f.RealPath, err)
+		}
+		return content, nil
+	}
+
 	contentReader, err := img.OpenPathFromSquash(f.RealPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open file %s: %w", f.RealPath, err)

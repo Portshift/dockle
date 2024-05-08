@@ -38,6 +38,7 @@ type Config struct {
 	ImageName            string
 	LocalImage           bool
 	FilePath             string
+	DirPath              string
 	Output               string
 	Format               string
 	IgnoreMap            map[string]struct{}
