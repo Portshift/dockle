@@ -49,6 +49,12 @@ func RunFromConfig(conf *config.Config) (types.AssessmentMap, error) {
 	return run(ctx)
 }
 
+func RunWithContext(ctx context.Context, conf *config.Config) (types.AssessmentMap, error) {
+	config.Conf = *conf
+
+	return run(ctx)
+}
+
 func run(ctx context.Context) (ret types.AssessmentMap, err error) {
 	quiet := config.Conf.Quiet
 	debug := config.Conf.Debug
